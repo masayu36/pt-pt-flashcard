@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Check, ChevronLeft, ChevronRight, Mic, RotateCcw, Settings, Volume2, X } from 'lucide-react';
+import { Check, Mic, RotateCcw, Settings, Volume2, X } from 'lucide-react';
 
 // Official Azure Speech pt-pt voice candidates we can try locally.
 const AZURE_VOICES = [
@@ -891,23 +891,6 @@ export default function App() {
                             </div>
                     </section>
                 </main>
-
-                <button
-                    type="button"
-                    aria-label="前のカードへ"
-                    onClick={prevCard}
-                    className="fixed left-4 top-1/2 z-40 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-stone-200 bg-white/95 text-slate-400 shadow-[0_10px_28px_rgba(15,23,42,0.10)] backdrop-blur transition hover:bg-stone-50 hover:text-slate-700"
-                >
-                    <ChevronLeft size={24} />
-                </button>
-                <button
-                    type="button"
-                    aria-label="次のカードへ"
-                    onClick={nextCard}
-                    className="fixed right-4 top-1/2 z-40 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-stone-200 bg-white/95 text-slate-400 shadow-[0_10px_28px_rgba(15,23,42,0.10)] backdrop-blur transition hover:bg-stone-50 hover:text-slate-700"
-                >
-                    <ChevronRight size={24} />
-                </button>
 
                 {showSettings && (
                     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 backdrop-blur-sm sm:items-center">
