@@ -10,201 +10,252 @@ const AZURE_VOICES = [
 ];
 
 const TTS_RATE = "0.9";
+const CORRECT_SOUND_PATH = "/sounds/correct.mp3";
+const INCORRECT_SOUND_PATH = "/sounds/incorrect.mp3";
 
 const DATA = [
-    { jp1: "遅刻している。", pt1: "Estou atrasado.", comment: "atrasado = late" },
-    { jp1: "迷った。", pt1: "Estou perdida.", comment: "" },
-    { jp1: "お腹空いている。", pt1: "Estou com fome.", comment: "com fome = hungry; estar com = ～の状態である" },
-    { jp1: "喉乾いている。", pt1: "Estou com sede.", comment: "com sede = thirsty" },
-    { jp1: "熱がある。", pt1: "Estou com febre.", comment: "com febre = have a fever" },
-    { jp1: "(私) 寒い。", pt1: "Estou com frio.", comment: "com frio = cold" },
-    { jp1: "(私) 熱い。", pt1: "Estou com calor.", comment: "com calor = hot" },
-    { jp1: "(外) 寒い。", pt1: "Está frio.", comment: "天候、気温の場合はitが主語だが、ポル語は表現しない。" },
-    { jp1: "(外) 暑い。", pt1: "Está calor/quente.", comment: "天候、気温の場合はitが主語だが、ポル語は表現しない。" },
-    { jp1: "(お前) 遅刻だよ。", pt1: "Estás atrasado.", comment: "atrasado = late" },
-    { jp1: "(あなた) 遅刻だよ。", pt1: "Está atrasado.", comment: "atrasado = late" },
-    { jp1: "(お前) お腹空いてる？", pt1: "Estás com fome?", comment: "com fome = hungry" },
-    { jp1: "(あなた) お腹空いてます？", pt1: "Está com fome?", comment: "com fome = hungry" },
-    { jp1: "(お前) 熱があるよ。", pt1: "Estás com febre.", comment: "com febre = have a fever" },
-    { jp1: "(あなた) 熱がありますよ。", pt1: "Está com febre.", comment: "com febre = have a fever" },
-    { jp1: "私はコウセイです。", pt1: "Eu sou o Kosei.", comment: "本質" },
-    { jp1: "私は日本人だよ。", pt1: "Eu sou japonês.", comment: "強調する時は主語を言っても良い。" },
-    { jp1: "君は中国人か？", pt1: "Tu és chinês?", comment: "強調する時は主語を言っても良い。" },
+    { jp1: "遅刻している。", pt1: "(Eu) Estou atrasado.", sound1: "Estou atrasado.", comment: "atrasado = late" },
+    { jp1: "迷った。", pt1: "(Eu) Estou perdido.", sound1: "Estou perdido.", comment: "perdido = lost (male)" },
+    { jp1: "お腹空いている。", pt1: "(Eu) Estou com fome.", sound1: "Estou com fome.", comment: "com fome = hungry; estar com = ～の状態である" },
+    { jp1: "喉乾いている。", pt1: "(Eu) Estou com sede.", sound1: "Estou com sede.", comment: "com sede = thirsty" },
+    { jp1: "熱がある。", pt1: "(Eu) Estou com febre.", sound1: "Estou com febre.", comment: "com febre = have a fever" },
+    { jp1: "(私) 寒い。", pt1: "(Eu) Estou com frio.", sound1: "Estou com frio.", comment: "com frio = cold" },
+    { jp1: "(私) 熱い。", pt1: "(Eu) Estou com calor.", sound1: "Estou com calor.", comment: "com calor = hot" },
+    { jp1: "(外) 寒い。", pt1: "Está frio.", sound1: "Está frio.", comment: "天候、気温の場合はitが主語だが、ポル語は表現しない。" },
+    { jp1: "(外) 暑い。", pt1: "Está calor/quente.", sound1: "Está calor.", comment: "天候、気温の場合はitが主語だが、ポル語は表現しない。" },
+    { jp1: "(お前) 遅刻だよ。", pt1: "(Tu) Estás atrasado.", sound1: "Estás atrasado.", comment: "atrasado = late" },
+    { jp1: "(あなた) 遅刻だよ。", pt1: "(Você) Está atrasado.", sound1: "Está atrasado.", comment: "atrasado = late" },
+    { jp1: "(お前) お腹空いてる？", pt1: "(Tu) Estás com fome?", sound1: "Estás com fome?", comment: "com fome = hungry" },
+    { jp1: "(あなた) お腹空いてます？", pt1: "(Você) Está com fome?", sound1: "Está com fome?", comment: "com fome = hungry" },
+    { jp1: "(お前) 熱があるよ。", pt1: "(Tu) Estás com febre.", sound1: "Estás com febre.", comment: "com febre = have a fever" },
+    { jp1: "(あなた) 熱がありますよ。", pt1: "(Você) Está com febre.", sound1: "Está com febre.", comment: "com febre = have a fever" },
+    { jp1: "私はコウセイです。", pt1: "(Eu) sou o Kosei.", sound1: "Eu sou o Kosei.", comment: "本質" },
+    { jp1: "私は日本人だよ。", pt1: "(Eu) sou japonês.", sound1: "Eu sou japonês.", comment: "強調する時は主語を言っても良い。" },
+    { jp1: "君は中国人か？", pt1: "(Tu) és chinês?", sound1: "Tu és chinês?", comment: "強調する時は主語を言っても良い。" },
     {
         jp1: "あなたはポルトガル人ですか？",
-        pt1: "Você é português?",
+        pt1: "(Você) é português?",
+        sound1: "Você é português?",
         jp2: "いいえ、ブラジル人です。",
         pt2: "Não, eu sou brasileiro.",
+        sound2: "Não, eu sou brasileiro.",
         comment: "会話形式",
     },
-    { jp1: "（君）日本のどこ出身なの？", pt1: "De onde és no Japão?", jp2: "東京出身です。", pt2: "Eu sou de Tóquio." },
-    { jp1: "ポルトガルはどこにあるの？", pt1: "Onde fica Portugal?", jp2: "ヨーロッパの西にあるよ。", pt2: "Fica no oeste da Europa." },
-    { jp1: "何の音楽を聴くの？", pt1: "Que música ouves?", jp2: "ビートルズを聴くよ。", pt2: "Eu ouço os Beatles." },
-    { jp1: "休みの日は何してる？", pt1: "O que fazes nos tempos livres?", jp2: "映画を観るよ。", pt2: "Eu assisto a filmes." },
-    { jp1: "太宰治って誰？有名なの？    ", pt1: "Quem é Osamu Dazai? É famoso?", jp2: "うん、そうだよ。", pt2: "Sim, é." },
-    { jp1: "どういう意味？", pt1: `O que é que significa "famoso"?`, jp2: "「有名」っていう意味だよ。", pt2: `Significa "famous"` },
+    { jp1: "（君）日本のどこ出身なの？", pt1: "De onde (é que) (tu) és no Japão?", sound1: "De onde é que és no Japão?", jp2: "東京出身です。", pt2: "(Eu) sou de Tóquio.", sound2: "Eu sou de Tóquio." },
+    { jp1: "ポルトガルはどこにあるの？", pt1: "Onde (é que) fica Portugal?", sound1: "Onde é que fica Portugal?", jp2: "ヨーロッパの西にあるよ。", pt2: "Fica no oeste da Europa.", sound2: "Fica no oeste da Europa." },
+    { jp1: "何の音楽を聴くの？", pt1: "Que música (é que) (tu) ouves?", sound1: "Que música é que tu ouves?", jp2: "ビートルズを聴くよ。", pt2: "(Eu) ouço/oiço os Beatles.", sound2: "Eu ouço os Beatles." },
+    { jp1: "休みの日は何してる？", pt1: "O que (é que) (tu) fazes nos tempos livres?", sound1: "O que é que tu fazes nos tempos livres?", jp2: "映画を観るよ。", pt2: "Eu assisto a filmes.", sound2: "Eu assisto a filmes." },
+    { jp1: "太宰治って誰？有名なの？    ", pt1: "Quem (é que) é Osamu Dazai? É famoso?", sound1: "Quem é que é Osamu Dazai? É famoso?", jp2: "うん、そうだよ。", pt2: "Sim, é.", sound2: "Sim, é." },
+    { jp1: "どういう意味？", pt1: `O que (é que) significa "famoso"?`, sound1: `O que é que significa "famoso"?`, jp2: "「有名」っていう意味だよ。", pt2: `Significa "famous"`, sound2: `Significa "famous"` },
     {
         jp1: 'その本いくら？',
-        pt1: 'Quanto é que custa esse livro?',
+        pt1: 'Quanto (é que) custa esse livro?',
+        sound1: 'Quanto é que custa esse livro?',
         jp2: '10ユーロだよ。',
         pt2: 'Custa 10 euros.',
+        sound2: 'Custa 10 euros.',
         comment: 'quanto = how much'
     },
     {
         jp1: 'How are you?（informal）',
-        pt1: 'Como estás?',
+        pt1: 'Como (é que) (tu) estás?',
+        sound1: 'Como estás?',
         jp2: 'I\'m good/well.',
         pt2: 'Estou bem.',
+        sound2: 'Estou bem.',
         comment: ''
     },
     {
         jp1: 'How are you?（formal）',
-        pt1: 'Como está?',
+        pt1: 'Como (é que) (você) está?',
+        sound1: 'Como está?',
         jp2: 'I\'m good/well.',
         pt2: 'Estou bem.',
+        sound2: 'Estou bem.',
         comment: ''
     },
     {
         jp1: '彼はどんな人？',
-        pt1: 'Como é ele?',
+        pt1: 'Como (é que) ele é?',
+        sound1: 'Como é que ele é?',
         jp2: '彼は背が高いよ。',
         pt2: 'Ele é alto.',
+        sound2: 'Ele é alto.',
         comment: ''
     },
     {
         jp1: 'How is he?',
-        pt1: 'Como está ele?',
+        pt1: 'Como (é que) ele está?',
+        sound1: 'Como é que ele está?',
         jp2: '彼はちょっと病気だよ。',
         pt2: 'Ele está um pouco doente.',
+        sound2: 'Ele está um pouco doente.',
         comment: 'doente = sick'
     },
     {
         jp1: '何のジュースが飲みたい？',
-        pt1: 'Que sumo queres beber?',
+        pt1: 'Que sumo (é que) (tu) queres beber?',
+        sound1: 'Que sumo é que tu queres beber?',
         jp2: 'オレンジジュースが飲みたい。',
         pt2: 'Quero beber sumo de laranja.',
+        sound2: 'Quero beber sumo de laranja.',
         comment: 'sumo = juice'
     },
     {
         jp1: 'How many bags do you have?',
-        pt1: 'Quantas malas tu tens?',
+        pt1: 'Quantas malas (é que) (tu) tens?',
+        sound1: 'Quantas malas é que tu tens?',
         jp2: '2つあります。',
-        pt2: 'Tenho duas malas',
+        pt2: 'Tenho duas (malas)',
+        sound2: 'Tenho duas.',
         comment: ''
     },
     {
         jp1: 'Why are you sad?',
-        pt1: 'Porque é que estás triste?',
+        pt1: 'Porque (é que) (tu) estás triste?',
+        sound1: 'Porque é que tu estás triste?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: ''
     },
     {
         jp1: '住所は何ですか？',
-        pt1: 'Qual é a morada?',
+        pt1: 'Qual (é que) é a morada?',
+        sound1: 'Qual é que é a morada?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: 'O que é X? は、Xの定義を尋ねることになる。'
     },
     {
         jp1: '国籍は何ですか？',
-        pt1: 'Qual é a nacionalidade?',
+        pt1: 'Qual (é que) é a sua nacionalidade?',
+        sound1: 'Qual é a sua nacionalidade?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: 'O que é X? は、Xの定義を尋ねることになる。'
     },
     {
         jp1: 'sumoって何？',
-        pt1: 'O que é sumo?',
+        pt1: 'O que (é que) é sumo?',
+        sound1: 'O que é que é sumo?',
         jp2: 'sumoはジュースのことだよ。',
         pt2: 'Sumo significa "juice".',
+        sound2: 'Sumo significa "juice".',
         comment: ''
     },
     {
         jp1: 'どの通りに住んでるの？',
-        pt1: 'Em que rua mora?',
+        pt1: 'Em que rua (é que) (tu) moras?',
+        sound1: 'Em que rua é que tu moras?',
         jp2: 'Nova Santa Cruz通りに住んでるよ。',
         pt2: 'Moro na Rua Nova Santa Cruz.',
+        sound2: 'Moro na Rua Nova Santa Cruz.',
         comment: 'rua = street'
     },
     {
         jp1: 'Who has a question? 質問ある人？',
-        pt1: 'Quem tem uma pergunta?',
+        pt1: 'Quem (é que) tem uma pergunta?',
+        sound1: 'Quem é que tem uma pergunta?',
         jp2: '私です。一個あります。',
         pt2: 'Eu tenho.',
+        sound2: 'Eu tenho.',
         comment: 'ter = have'
     },
     {
         jp1: 'いつポルトガルに行くの？',
-        pt1: 'Quando é que (tu) vais para Portugal?',
+        pt1: 'Quando (é que) (tu) vais para Portugal?',
+        sound1: 'Quando é que tu vais para Portugal?',
         jp2: '９月に行くよ。',
         pt2: 'vou em setembro.',
+        sound2: 'vou em setembro.',
         comment: '月は小文字。'
     },
     {
         jp1: 'いつからポルトガルにいるの？',
-        pt1: 'Desde quando estás em Portugal?',
+        pt1: 'Desde quando (é que) (tu) estás em Portugal?',
+        sound1: 'Desde quando é que tu estás em Portugal?',
         jp2: '９月からいるよ。',
         pt2: 'Estou desde setembro.',
+        sound2: 'Estou desde setembro.',
         comment: 'desde = since'
     },
     {
-        jp1: 'どれがおすすめですか？',
-        pt1: 'Quais recomenda?',
+        jp1: 'どれがおすすめですか？（複数）',
+        pt1: 'Quais (é que) recomenda?',
+        sound1: 'Quais é que recomenda?',
         jp2: 'この本とあの本をおすすめします。',
         pt2: 'Recomendo este livro e aquele livro.',
+        sound2: 'Recomendo este livro e aquele livro.',
         comment: 'qual > quais'
     },
     {
         jp1: 'いつまで日本にいるの？',
-        pt1: 'Até quando ficas no Japão?',
+        pt1: 'Até quando (é que) (tu) ficas no Japão?',
+        sound1: 'Até quando é que tu ficas no Japão?',
         jp2: '８月まで日本にいるよ。',
         pt2: 'Fico até agosto.',
+        sound2: 'Fico até agosto.',
         comment: ''
     },
     {
         jp1: 'Wi-fiのパスワードはなに？',
-        pt1: 'Qual é a senha do Wi-fi?',
+        pt1: 'Qual (é que) é a senha do Wi-fi?',
+        sound1: 'Qual é que é a senha do Wi-fi?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: ''
     },
 
     {
         jp1: 'APPLEはポルトガル語で何て言うの？',
-        pt1: 'Como se diz "APPLE" em português?',
+        pt1: 'Como (é que) se diz "APPLE" em português?',
+        sound1: 'Como é que se diz "APPLE" em português?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: ''
     },
     {
         jp1: '何時に着くの？',
-        pt1: 'A que horas é que vais chegar?',
+        pt1: 'A que horas (é que) (tu) vais chegar?',
+        sound1: 'A que horas é que tu vais chegar?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: ''
     },
     {
         jp1: '授業は何時から？',
-        pt1: 'A que horas é a aula?',
+        pt1: 'A que horas (é que) é a aula?',
+        sound1: 'A que horas é a aula?',
         jp2: '',
         pt2: '',
+        sound2: '',
         comment: ''
     },
     {
         jp1: 'トイレはどこですか？',
-        pt1: 'Onde é que fica a casa de banho?',
+        pt1: 'Onde (é que) fica a casa de banho?',
+        sound1: 'Onde é que fica a casa de banho?',
         jp2: 'あっちの突き当たりだよ。',
         pt2: 'Fica ali ao fundo.',
-        comment: ''
+        sound2: 'Fica ali ao fundo.',
+        comment: 'ali = over there (visible); fundo = bottom, end'
     },
     {
         jp1: '一日に何時間勉強する？',
-        pt1: 'Quantas horas estudas por dia?',
+        pt1: 'Quantas horas (é que) (tu) estudas por dia?',
+        sound1: 'Quantas horas é que tu estudas por dia?',
         jp2: '3時間くらい',
         pt2: 'Mais ou menos 3 horas.',
+        sound2: 'Mais ou menos 3 horas.',
         comment: '3 = três'
-    }
+    },
+
 
 
 
@@ -250,6 +301,24 @@ const normalizeText = (text) =>
         .replace(/\s+/g, " ")
         .trim();
 
+const expandOptionalParentheticals = (text) => {
+    const match = text.match(/[\(（][^\)）]*[\)）]/);
+    if (!match || match.index == null) {
+        return [text];
+    }
+
+    const start = match.index;
+    const end = start + match[0].length;
+    const before = text.slice(0, start);
+    const inside = match[0].slice(1, -1);
+    const after = text.slice(end);
+
+    return [
+        ...expandOptionalParentheticals(`${before}${inside}${after}`),
+        ...expandOptionalParentheticals(`${before}${after}`),
+    ];
+};
+
 const expandAnswerVariants = (text) => {
     const segments = text.split(/(\S*\/\S*)/g).filter(Boolean);
     let variants = [""];
@@ -266,22 +335,37 @@ const expandAnswerVariants = (text) => {
         );
     });
 
-    return [...new Set(variants.map(normalizeText))];
+    return [
+        ...new Set(
+            variants
+                .flatMap((variant) => expandOptionalParentheticals(variant))
+                .map(normalizeText)
+                .filter(Boolean)
+        ),
+    ];
 };
 
 const buildPromptLines = (item) => {
-    const lines = [{ jp: item.jp1, pt: item.pt1, voiceSlot: 0 }];
+    const lines = [{ jp: item.jp1, pt: item.pt1, sound: item.sound1 || item.pt1, voiceSlot: 0 }];
     if (item.jp2 && item.pt2) {
-        lines.push({ jp: item.jp2, pt: item.pt2, voiceSlot: 1 });
+        lines.push({ jp: item.jp2, pt: item.pt2, sound: item.sound2 || item.pt2, voiceSlot: 1 });
     }
     return lines;
 };
+
+const createQuestionResult = (total) => ({
+    answered: false,
+    correct: 0,
+    total,
+});
 
 export default function App() {
     const [selectedMode, setSelectedMode] = useState("review");
     const [selectedQuestionCount, setSelectedQuestionCount] = useState(DATA.length);
     const [sessionDeck, setSessionDeck] = useState([]);
     const [sessionActive, setSessionActive] = useState(false);
+    const [sessionCompleted, setSessionCompleted] = useState(false);
+    const [sessionResults, setSessionResults] = useState([]);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
     const [revealedReviewLines, setRevealedReviewLines] = useState([]);
@@ -303,6 +387,7 @@ export default function App() {
     const recognitionLineRef = useRef(null);
     const speechDraftRef = useRef("");
     const speechStopRequestedRef = useRef(false);
+    const feedbackAudioRef = useRef(null);
 
     useEffect(() => {
         const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -320,6 +405,10 @@ export default function App() {
             if (recognitionRef.current) {
                 recognitionRef.current.abort();
             }
+            if (feedbackAudioRef.current) {
+                feedbackAudioRef.current.pause();
+                feedbackAudioRef.current.src = "";
+            }
         };
     }, []);
 
@@ -335,6 +424,19 @@ export default function App() {
             audioUrlRef.current = null;
         }
         setActiveSpeaker(null);
+    };
+
+    const playFeedbackSound = (matched) => {
+        const source = matched ? CORRECT_SOUND_PATH : INCORRECT_SOUND_PATH;
+
+        if (feedbackAudioRef.current) {
+            feedbackAudioRef.current.pause();
+            feedbackAudioRef.current.currentTime = 0;
+        }
+
+        const audio = new Audio(source);
+        feedbackAudioRef.current = audio;
+        audio.play().catch(() => { });
     };
 
     const stopRecognition = (mode = "abort") => {
@@ -359,6 +461,10 @@ export default function App() {
     const finalizeSpeechRecognition = (lineIndex, transcript, error = "") => {
         const trimmedTranscript = transcript.trim();
         const matched = trimmedTranscript ? judgeAnswer(trimmedTranscript, promptLines[lineIndex].pt) : null;
+
+        if (matched != null) {
+            playFeedbackSound(matched);
+        }
 
         setSpeechResults((prev) =>
             prev.map((entry, index) =>
@@ -389,15 +495,19 @@ export default function App() {
         const nextDeck = shuffleIndices().slice(0, selectedQuestionCount);
         const firstItem = DATA[nextDeck[0]];
         setSessionDeck(nextDeck);
+        setSessionResults(nextDeck.map((deckIndex) => createQuestionResult(buildPromptLines(DATA[deckIndex]).length)));
         setCurrentPosition(0);
         setSessionActive(true);
+        setSessionCompleted(false);
         resetPerQuestionState(buildPromptLines(firstItem));
     };
 
     const leaveSession = () => {
         setSessionActive(false);
+        setSessionCompleted(false);
         setCurrentPosition(0);
         setSessionDeck([]);
+        setSessionResults([]);
         stopAudio();
         stopRecognition();
         setShowAnswer(false);
@@ -413,18 +523,6 @@ export default function App() {
         setSwipeOffset(0);
         setSwipeActive(false);
         resetPerQuestionState(buildPromptLines(item));
-    };
-
-    const nextCard = () => {
-        if (!sessionDeck.length) return;
-        const nextPosition = (currentPosition + 1) % sessionDeck.length;
-        moveToPosition(nextPosition);
-    };
-
-    const prevCard = () => {
-        if (!sessionDeck.length) return;
-        const nextPosition = (currentPosition - 1 + sessionDeck.length) % sessionDeck.length;
-        moveToPosition(nextPosition);
     };
 
     const currentIndex = sessionDeck[currentPosition];
@@ -483,6 +581,62 @@ export default function App() {
         }
     };
 
+    const playPromptLinesSequentially = async (lines) => {
+        if (!lines.length) return;
+
+        const playbackId = playbackIdRef.current + 1;
+        stopAudio();
+        playbackIdRef.current = playbackId;
+
+        try {
+            for (let index = 0; index < lines.length; index += 1) {
+                const line = lines[index];
+                if (!line?.sound) continue;
+
+                setActiveSpeaker(index);
+
+                const blob = await synthesizeSpeech(line.sound, index === 0 ? voiceA : voiceB);
+                if (playbackIdRef.current !== playbackId) return;
+
+                const url = URL.createObjectURL(blob);
+                audioUrlRef.current = url;
+
+                const audio = new Audio(url);
+                audioRef.current = audio;
+
+                const ended = new Promise((resolve) => {
+                    audio.onended = resolve;
+                    audio.onerror = resolve;
+                });
+
+                try {
+                    await audio.play();
+                } catch {
+                    if (audioUrlRef.current === url) {
+                        URL.revokeObjectURL(url);
+                        audioUrlRef.current = null;
+                    }
+                    audioRef.current = null;
+                    break;
+                }
+
+                await ended;
+
+                if (audioUrlRef.current === url) {
+                    URL.revokeObjectURL(url);
+                    audioUrlRef.current = null;
+                }
+                audioRef.current = null;
+
+                if (playbackIdRef.current !== playbackId) return;
+            }
+        } finally {
+            if (playbackIdRef.current === playbackId) {
+                setActiveSpeaker(null);
+            }
+        }
+    };
+
     const toggleAnswer = (lineIndex = 0) => {
         if (selectedMode !== "review") return;
         setRevealedReviewLines((prev) => prev.map((revealed, index) => (index === lineIndex ? !revealed : revealed)));
@@ -493,9 +647,77 @@ export default function App() {
     };
 
     const judgeAnswer = (userAnswer, correctAnswer) => {
-        const normalizedUser = normalizeText(userAnswer);
-        if (!normalizedUser) return false;
-        return expandAnswerVariants(correctAnswer).includes(normalizedUser);
+        const userVariants = expandAnswerVariants(userAnswer);
+        if (!userVariants.length) return false;
+
+        const correctVariants = new Set(expandAnswerVariants(correctAnswer));
+        return userVariants.some((variant) => correctVariants.has(variant));
+    };
+
+    const buildCurrentQuestionResult = () => {
+        if (!promptLines.length) {
+            return createQuestionResult(0);
+        }
+
+        if (selectedMode === "review") {
+            const correct = revealedReviewLines.filter(Boolean).length;
+            return {
+                answered: correct > 0,
+                correct,
+                total: promptLines.length,
+            };
+        }
+
+        if (selectedMode === "typed") {
+            const correct = promptLines.reduce(
+                (count, line, index) => count + (judgeAnswer(typedAnswers[index] ?? "", line.pt) ? 1 : 0),
+                0
+            );
+            return {
+                answered: typedAnswers.some((answer) => normalizeText(answer ?? "")),
+                correct,
+                total: promptLines.length,
+            };
+        }
+
+        const correct = speechResults.reduce((count, result) => count + (result?.matched === true ? 1 : 0), 0);
+        return {
+            answered: speechResults.some((result) => (result?.transcript ?? "").trim() || result?.error),
+            correct,
+            total: promptLines.length,
+        };
+    };
+
+    const storeCurrentQuestionResult = () => {
+        if (!sessionDeck.length) return;
+        const result = buildCurrentQuestionResult();
+        setSessionResults((prev) => prev.map((entry, index) => (index === currentPosition ? result : entry)));
+    };
+
+    const completeSession = () => {
+        storeCurrentQuestionResult();
+        stopAudio();
+        stopRecognition();
+        setSwipeOffset(0);
+        setSwipeActive(false);
+        setSessionActive(false);
+        setSessionCompleted(true);
+    };
+
+    const nextCard = () => {
+        if (!sessionDeck.length) return;
+        if (currentPosition >= sessionDeck.length - 1) {
+            completeSession();
+            return;
+        }
+        storeCurrentQuestionResult();
+        moveToPosition(currentPosition + 1);
+    };
+
+    const prevCard = () => {
+        if (!sessionDeck.length || currentPosition === 0) return;
+        storeCurrentQuestionResult();
+        moveToPosition(currentPosition - 1);
     };
 
     const startSpeechRecognition = (lineIndex) => {
@@ -572,8 +794,39 @@ export default function App() {
     };
 
     const checkTypedAnswers = () => {
+        const hasIncorrect = promptLines.some((line, index) => !judgeAnswer(typedAnswers[index] ?? "", line.pt));
+        playFeedbackSound(!hasIncorrect);
         setShowAnswer(true);
+        void playPromptLinesSequentially(promptLines);
     };
+
+    useEffect(() => {
+        if (!sessionActive || selectedMode !== "typed") return undefined;
+
+        const handleKeyDown = (event) => {
+            if (event.isComposing) return;
+
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                if (!showAnswer) {
+                    checkTypedAnswers();
+                }
+                return;
+            }
+
+            if (event.key === "ArrowRight") {
+                event.preventDefault();
+                if (showAnswer) {
+                    nextCard();
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [sessionActive, selectedMode, showAnswer, typedAnswers, promptLines, currentPosition, sessionDeck, voiceA, voiceB]);
+
+    const nextActionLabel = currentPosition >= sessionDeck.length - 1 ? "結果を見る" : "次へ";
 
     const swipeHandlers = useSwipeable({
         trackMouse: true,
@@ -656,7 +909,7 @@ export default function App() {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 if (revealedReviewLines[index]) {
-                                    playSpeech(line.pt, index === 0 ? voiceA : voiceB, index);
+                                    playSpeech(line.sound, index === 0 ? voiceA : voiceB, index);
                                 }
                             }}
                             className={`hidden rounded-2xl p-3 transition-colors sm:block ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-500 hover:bg-stone-100"}`}
@@ -671,7 +924,7 @@ export default function App() {
                             aria-label="音声を再生"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                playSpeech(line.pt, index === 0 ? voiceA : voiceB, index);
+                                playSpeech(line.sound, index === 0 ? voiceA : voiceB, index);
                             }}
                             className={`flex w-full items-center justify-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition-colors sm:hidden ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-600 border border-stone-200"}`}
                         >
@@ -698,21 +951,28 @@ export default function App() {
                             className="h-24 w-full resize-none rounded-2xl border border-stone-200 bg-white px-4 py-3 text-lg font-medium text-slate-900 outline-none transition-colors focus:border-emerald-400"
                         />
                         {showAnswer && (
-                            <div className={`mt-3 rounded-2xl px-4 py-3 text-sm ${matched ? "bg-emerald-100 text-emerald-900" : "bg-amber-100 text-amber-950"}`}>
-                                <p className="font-bold">{matched ? "正解" : "確認"}</p>
+                            <div className={`mt-3 rounded-2xl px-4 py-3 text-sm ${matched ? "bg-emerald-100 text-emerald-900" : "bg-rose-100 text-rose-900"}`}>
+                                <p className="font-bold">{matched ? "正解" : "不正解"}</p>
                                 <p className="mt-1">{line.pt}</p>
                             </div>
+                        )}
+                        {showAnswer && (
+                            <button
+                                type="button"
+                                aria-label="音声を再生"
+                                onClick={() => playSpeech(line.sound, index === 0 ? voiceA : voiceB, index)}
+                                className={`mt-3 flex w-full items-center justify-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition-colors ${activeSpeaker === index
+                                    ? "bg-emerald-700 text-white"
+                                    : "border border-stone-200 bg-white text-slate-600"
+                                    }`}
+                            >
+                                <Volume2 size={18} />
+                                音声を再生
+                            </button>
                         )}
                     </div>
                 );
             })}
-            <button
-                type="button"
-                onClick={checkTypedAnswers}
-                className="w-full rounded-[22px] bg-slate-900 px-4 py-4 text-base font-black text-white"
-            >
-                答え合わせ
-            </button>
         </div>
     );
 
@@ -760,7 +1020,7 @@ export default function App() {
         </div>
     );
 
-    if (!sessionActive) {
+    if (!sessionActive && !sessionCompleted) {
         return (
             <div className="min-h-screen bg-stone-100 text-slate-900">
                 <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-start px-4 py-6 sm:px-6">
@@ -813,6 +1073,40 @@ export default function App() {
                         >
                             この設定で始める
                         </button>
+                    </main>
+                </div>
+            </div>
+        );
+    }
+
+    if (sessionCompleted) {
+        return (
+            <div className="min-h-screen bg-stone-100 text-slate-900">
+                <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-start px-4 py-6 sm:px-6">
+                    <main className="rounded-[36px] border border-stone-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] sm:p-8">
+                        <h1 className="text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
+                            終了
+                        </h1>
+                        <p className="mt-3 text-base leading-7 text-slate-600">
+                            {sessionDeck.length}問を最後まで完了しました。
+                        </p>
+
+                        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                            <button
+                                type="button"
+                                onClick={startSession}
+                                className="rounded-[24px] bg-slate-900 px-5 py-4 text-base font-black text-white"
+                            >
+                                もう一度
+                            </button>
+                            <button
+                                type="button"
+                                onClick={leaveSession}
+                                className="rounded-[24px] border border-stone-200 bg-stone-50 px-5 py-4 text-base font-black text-slate-700"
+                            >
+                                設定に戻る
+                            </button>
+                        </div>
                     </main>
                 </div>
             </div>
@@ -918,6 +1212,36 @@ export default function App() {
                                         </button>
                                     ) : null}
                                 </div>
+
+                                {selectedMode === "typed" && (
+                                    <button
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (showAnswer) {
+                                                nextCard();
+                                                return;
+                                            }
+                                            checkTypedAnswers();
+                                        }}
+                                        className="mt-4 w-full rounded-[22px] bg-slate-900 px-4 py-4 text-base font-black text-white"
+                                    >
+                                        {showAnswer ? nextActionLabel : "答え合わせ"}
+                                    </button>
+                                )}
+
+                                {selectedMode !== "typed" && (
+                                    <button
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            nextCard();
+                                        }}
+                                        className="mt-4 w-full rounded-[22px] bg-slate-900 px-4 py-4 text-base font-black text-white"
+                                    >
+                                        {nextActionLabel}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </section>
