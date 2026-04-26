@@ -43,10 +43,10 @@ const DATA = [
     },
     { jp1: "（君）日本のどこ出身なの？", pt1: "De onde (é que) (tu) és no Japão?", sound1: "De onde é que és no Japão?", jp2: "東京出身です。", pt2: "(Eu) sou de Tóquio.", sound2: "Eu sou de Tóquio." },
     { jp1: "ポルトガルはどこにあるの？", pt1: "Onde (é que) fica Portugal?", sound1: "Onde é que fica Portugal?", jp2: "ヨーロッパの西にあるよ。", pt2: "Fica no oeste da Europa.", sound2: "Fica no oeste da Europa." },
-    { jp1: "何の音楽を聴くの？", pt1: "Que música (é que) (tu) ouves?", sound1: "Que música é que tu ouves?", jp2: "ビートルズを聴くよ。", pt2: "(Eu) ouço/oiço os Beatles.", sound2: "Eu ouço os Beatles." },
-    { jp1: "休みの日は何してる？", pt1: "O que (é que) (tu) fazes nos tempos livres?", sound1: "O que é que tu fazes nos tempos livres?", jp2: "映画を観るよ。", pt2: "Eu assisto a filmes.", sound2: "Eu assisto a filmes." },
+    { jp1: "何の音楽を聴くの？", pt1: "Que música (é que) (tu) ouves?", sound1: "Que música é que ouves?", jp2: "ビートルズを聴くよ。", pt2: "(Eu) ouço/oiço os Beatles.", sound2: "Eu ouço os Beatles." },
+    { jp1: "休みの日は何してる？", pt1: "O que (é que) (tu) fazes nos tempos livres?", sound1: "O que é que fazes nos tempos livres?", jp2: "映画を観るよ。", pt2: "Eu assisto a filmes.", sound2: "Eu assisto a filmes." },
     { jp1: "太宰治って誰？有名なの？    ", pt1: "Quem (é que) é Osamu Dazai? É famoso?", sound1: "Quem é que é Osamu Dazai? É famoso?", jp2: "うん、そうだよ。", pt2: "Sim, é.", sound2: "Sim, é." },
-    { jp1: "どういう意味？", pt1: `O que (é que) significa "famoso"?`, sound1: `O que é que significa "famoso"?`, jp2: "「有名」っていう意味だよ。", pt2: `Significa "famous"`, sound2: `Significa "famous"` },
+    { jp1: "famosoってどういう意味？", pt1: `O que (é que) significa "famoso"?`, sound1: `O que é que significa "famoso"?`, jp2: "「有名」っていう意味だよ。", pt2: `Significa "famous"`, sound2: `Significa "famous"` },
     {
         jp1: 'その本いくら？',
         pt1: 'Quanto (é que) custa esse livro?',
@@ -113,7 +113,7 @@ const DATA = [
     {
         jp1: 'Why are you sad?',
         pt1: 'Porque (é que) (tu) estás triste?',
-        sound1: 'Porque é que tu estás triste?',
+        sound1: 'Porque é que estás triste?',
         jp2: '',
         pt2: '',
         sound2: '',
@@ -160,17 +160,17 @@ const DATA = [
         pt1: 'Quem (é que) tem uma pergunta?',
         sound1: 'Quem é que tem uma pergunta?',
         jp2: '私です。一個あります。',
-        pt2: 'Eu tenho.',
-        sound2: 'Eu tenho.',
+        pt2: 'Eu tenho uma.',
+        sound2: 'Eu tenho uma.',
         comment: 'ter = have'
     },
     {
         jp1: 'いつポルトガルに行くの？',
         pt1: 'Quando (é que) (tu) vais para Portugal?',
-        sound1: 'Quando é que tu vais para Portugal?',
+        sound1: 'Quando é que vais para Portugal?',
         jp2: '９月に行くよ。',
-        pt2: 'vou em setembro.',
-        sound2: 'vou em setembro.',
+        pt2: '(Eu) vou em setembro.',
+        sound2: 'Vou em setembro.',
         comment: '月は小文字。'
     },
     {
@@ -194,7 +194,7 @@ const DATA = [
     {
         jp1: 'いつまで日本にいるの？',
         pt1: 'Até quando (é que) (tu) ficas no Japão?',
-        sound1: 'Até quando é que tu ficas no Japão?',
+        sound1: 'Até quando é que ficas no Japão?',
         jp2: '８月まで日本にいるよ。',
         pt2: 'Fico até agosto.',
         sound2: 'Fico até agosto.',
@@ -222,7 +222,7 @@ const DATA = [
     {
         jp1: '何時に着くの？',
         pt1: 'A que horas (é que) (tu) vais chegar?',
-        sound1: 'A que horas é que tu vais chegar?',
+        sound1: 'A que horas é que vais chegar?',
         jp2: '',
         pt2: '',
         sound2: '',
@@ -1164,9 +1164,7 @@ export default function App() {
                                     </p>
                                 )}
                                 {selectedMode === "typed" && (
-                                    <p className="mb-4 text-center text-sm font-semibold text-slate-400">
-                                        ポルトガル語を入力して答え合わせ
-                                    </p>
+                                    null
                                 )}
                                 {selectedMode === "speech" && (
                                     <p className="mb-4 text-center text-sm font-semibold text-slate-400">
