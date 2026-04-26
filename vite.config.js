@@ -42,15 +42,19 @@ const createApiHandler = (env) => {
       }
 
       try {
-        const { text, voiceName } = await readJsonBody(req);
+        const { text, voiceName, rate } = await readJsonBody(req);
         if (!text || !voiceName) {
           return json(res, 400, { error: 'text and voiceName are required.' });
         }
 
+        const speechRate = typeof rate === 'string' && rate.trim() ? rate.trim() : '1.0';
+
         const ssml = `
           <speak version="1.0" xml:lang="pt-PT">
             <voice name="${voiceName}">
-              ${escapeSsml(text)}
+              <prosody rate="${escapeSsml(speechRate)}">
+                ${escapeSsml(text)}
+              </prosody>
             </voice>
           </speak>
         `.trim();

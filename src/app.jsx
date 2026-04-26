@@ -9,6 +9,8 @@ const AZURE_VOICES = [
     { shortName: "pt-pt-FernandaNeural", label: "Fernanda", lang: "pt-pt", gender: "Female" },
 ];
 
+const TTS_RATE = "0.9";
+
 const DATA = [
     { jp1: "遅刻している。", pt1: "Estou atrasado.", comment: "atrasado = late" },
     { jp1: "迷った。", pt1: "Estou perdida.", comment: "" },
@@ -282,6 +284,7 @@ export default function App() {
     const [sessionActive, setSessionActive] = useState(false);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
+    const [revealedReviewLines, setRevealedReviewLines] = useState([]);
     const [showComment, setShowComment] = useState(false);
     const [typedAnswers, setTypedAnswers] = useState([]);
     const [speechResults, setSpeechResults] = useState([]);
@@ -374,6 +377,7 @@ export default function App() {
 
     const resetPerQuestionState = (lines) => {
         setShowAnswer(false);
+        setRevealedReviewLines(lines.map(() => false));
         setShowComment(false);
         setTypedAnswers(lines.map(() => ""));
         setSpeechResults(lines.map(() => ({ transcript: "", matched: null, error: "", revealAnswer: false })));
@@ -397,6 +401,7 @@ export default function App() {
         stopAudio();
         stopRecognition();
         setShowAnswer(false);
+        setRevealedReviewLines([]);
         setShowComment(false);
         setTypedAnswers([]);
         setSpeechResults([]);
@@ -435,6 +440,7 @@ export default function App() {
             body: JSON.stringify({
                 text,
                 voiceName,
+                rate: TTS_RATE,
             }),
         });
 
@@ -477,9 +483,9 @@ export default function App() {
         }
     };
 
-    const toggleAnswer = () => {
+    const toggleAnswer = (lineIndex = 0) => {
         if (selectedMode !== "review") return;
-        setShowAnswer((prev) => !prev);
+        setRevealedReviewLines((prev) => prev.map((revealed, index) => (index === lineIndex ? !revealed : revealed)));
     };
 
     const updateTypedAnswer = (lineIndex, value) => {
@@ -631,28 +637,48 @@ export default function App() {
     const renderReviewMode = () => (
         <div className="space-y-3">
             {promptLines.map((line, index) => (
-                <div
-                    key={`${currentIndex}-${index}-review`}
-                    className={`flex items-center gap-4 rounded-[24px] border px-4 py-4 transition-all ${activeSpeaker === index ? "border-emerald-300 bg-emerald-50" : "border-stone-200 bg-stone-50"}`}
-                >
-                    <div className="min-w-0 flex-1">
-                        <p className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
-                            {showAnswer ? line.pt : "••••••••••"}
-                        </p>
-                    </div>
-                    <button
-                        type="button"
-                        aria-label="音声を再生"
+                <div key={`${currentIndex}-${index}-review`} className="space-y-3">
+                    <div
                         onClick={(e) => {
                             e.stopPropagation();
-                            if (showAnswer) {
-                                playSpeech(line.pt, index === 0 ? voiceA : voiceB, index);
-                            }
+                            toggleAnswer(index);
                         }}
-                        className={`rounded-2xl p-3 transition-colors ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-500 hover:bg-stone-100"}`}
+                        className={`flex items-center gap-4 rounded-[24px] border px-4 py-4 transition-all ${activeSpeaker === index ? "border-emerald-300 bg-emerald-50" : "border-stone-200 bg-stone-50"}`}
                     >
-                        <Volume2 size={18} />
-                    </button>
+                        <div className="min-w-0 flex-1">
+                            <p className="mt-1 text-2xl font-semibold leading-tight text-slate-900">
+                                {revealedReviewLines[index] ? line.pt : "••••••••••"}
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            aria-label="音声を再生"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (revealedReviewLines[index]) {
+                                    playSpeech(line.pt, index === 0 ? voiceA : voiceB, index);
+                                }
+                            }}
+                            className={`hidden rounded-2xl p-3 transition-colors sm:block ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-500 hover:bg-stone-100"}`}
+                        >
+                            <Volume2 size={18} />
+                        </button>
+                    </div>
+
+                    {revealedReviewLines[index] && (
+                        <button
+                            type="button"
+                            aria-label="音声を再生"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                playSpeech(line.pt, index === 0 ? voiceA : voiceB, index);
+                            }}
+                            className={`flex w-full items-center justify-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition-colors sm:hidden ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-600 border border-stone-200"}`}
+                        >
+                            <Volume2 size={18} />
+                            音声を再生
+                        </button>
+                    )}
                 </div>
             ))}
         </div>
@@ -737,7 +763,7 @@ export default function App() {
     if (!sessionActive) {
         return (
             <div className="min-h-screen bg-stone-100 text-slate-900">
-                <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-center px-4 py-6 sm:px-6">
+                <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-start px-4 py-6 sm:px-6">
                     <main className="rounded-[36px] border border-stone-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] sm:p-8">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-700">Portuguese study</p>
                         <h1 className="mt-3 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
@@ -795,7 +821,7 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-stone-100 text-slate-900 select-none">
-            <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center px-4 py-4 sm:px-6">
+            <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-start px-4 py-4 sm:px-6">
                 <main className="flex w-full flex-col gap-4">
                     <div className="flex items-center justify-between px-1">
                         <div className="rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-[0_10px_28px_rgba(15,23,42,0.06)]">
@@ -831,7 +857,7 @@ export default function App() {
                             onKeyDown={(e) => {
                                 if (selectedMode === "review" && (e.key === "Enter" || e.key === " ")) {
                                     e.preventDefault();
-                                    toggleAnswer();
+                                    toggleAnswer(0);
                                 }
                             }}
                             style={{
@@ -854,7 +880,7 @@ export default function App() {
                             <div className="px-5 py-5 sm:px-6">
                                 {selectedMode === "review" && (
                                     <p className="mb-4 text-center text-sm font-semibold text-slate-400">
-                                        カードをタップして答えを{showAnswer ? "隠す" : "表示"}
+                                        カードをタップして答えを表示
                                     </p>
                                 )}
                                 {selectedMode === "typed" && (
@@ -883,7 +909,7 @@ export default function App() {
                                             className="block h-[72px] w-full rounded-[20px] bg-stone-100 px-4 text-left text-sm text-slate-600"
                                         >
                                             <div className="flex h-full items-center justify-center">
-                                                {showAnswer || showComment ? (
+                                                {(selectedMode === "review" ? revealedReviewLines.some(Boolean) : showAnswer) || showComment ? (
                                                     <span className="w-full text-left leading-relaxed">{currentItem.comment}</span>
                                                 ) : (
                                                     <span className="font-semibold text-slate-400">ヒントを見る</span>
