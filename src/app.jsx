@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Check, Mic, RotateCcw, Settings, Volume2, X } from 'lucide-react';
+import { useSwipeable } from 'react-swipeable';
 
 // Official Azure Speech pt-pt voice candidates we can try locally.
 const AZURE_VOICES = [
@@ -283,13 +284,11 @@ export default function App() {
     const [showSettings, setShowSettings] = useState(false);
     const [speechSupported, setSpeechSupported] = useState(false);
     const [listeningIndex, setListeningIndex] = useState(null);
+    const [swipeOffset, setSwipeOffset] = useState(0);
+    const [swipeActive, setSwipeActive] = useState(false);
     const audioRef = useRef(null);
     const audioUrlRef = useRef(null);
     const playbackIdRef = useRef(0);
-    const touchStartXRef = useRef(null);
-    const touchStartYRef = useRef(null);
-    const touchCurrentXRef = useRef(null);
-    const touchCurrentYRef = useRef(null);
     const recognitionRef = useRef(null);
     const recognitionLineRef = useRef(null);
     const speechDraftRef = useRef("");
@@ -399,6 +398,8 @@ export default function App() {
     const moveToPosition = (nextPosition) => {
         const item = DATA[sessionDeck[nextPosition]];
         setCurrentPosition(nextPosition);
+        setSwipeOffset(0);
+        setSwipeActive(false);
         resetPerQuestionState(buildPromptLines(item));
     };
 
@@ -472,43 +473,6 @@ export default function App() {
     const toggleAnswer = () => {
         if (selectedMode !== "review") return;
         setShowAnswer((prev) => !prev);
-    };
-
-    const handleTouchStart = (e) => {
-        touchStartXRef.current = e.changedTouches[0]?.clientX ?? null;
-        touchStartYRef.current = e.changedTouches[0]?.clientY ?? null;
-        touchCurrentXRef.current = touchStartXRef.current;
-        touchCurrentYRef.current = touchStartYRef.current;
-    };
-
-    const handleTouchMove = (e) => {
-        touchCurrentXRef.current = e.changedTouches[0]?.clientX ?? null;
-        touchCurrentYRef.current = e.changedTouches[0]?.clientY ?? null;
-    };
-
-    const handleTouchEnd = (e) => {
-        const startX = touchStartXRef.current;
-        const startY = touchStartYRef.current;
-        const endX = touchCurrentXRef.current ?? e.changedTouches[0]?.clientX ?? null;
-        const endY = touchCurrentYRef.current ?? e.changedTouches[0]?.clientY ?? null;
-        touchStartXRef.current = null;
-        touchStartYRef.current = null;
-        touchCurrentXRef.current = null;
-        touchCurrentYRef.current = null;
-
-        if (startX == null || startY == null || endX == null || endY == null) return;
-
-        const deltaX = endX - startX;
-        const deltaY = endY - startY;
-
-        if (Math.abs(deltaX) < 50) return;
-        if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
-
-        if (deltaX < 0) {
-            nextCard();
-        } else {
-            prevCard();
-        }
     };
 
     const updateTypedAnswer = (lineIndex, value) => {
@@ -597,6 +561,36 @@ export default function App() {
     const checkTypedAnswers = () => {
         setShowAnswer(true);
     };
+
+    const swipeHandlers = useSwipeable({
+        trackMouse: true,
+        trackTouch: true,
+        preventScrollOnSwipe: true,
+        delta: 50,
+        onSwipeStart: () => {
+            setSwipeActive(true);
+        },
+        onSwiping: ({ deltaX, deltaY }) => {
+            if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+            const limitedOffset = Math.max(-96, Math.min(96, deltaX));
+            setSwipeActive(true);
+            setSwipeOffset(limitedOffset);
+        },
+        onSwipedLeft: () => {
+            setSwipeOffset(0);
+            setSwipeActive(false);
+            nextCard();
+        },
+        onSwipedRight: () => {
+            setSwipeOffset(0);
+            setSwipeActive(false);
+            prevCard();
+        },
+        onSwiped: () => {
+            setSwipeOffset(0);
+            setSwipeActive(false);
+        },
+    });
 
     const renderJapanesePrompt = () => {
         if (!currentItem) return null;
@@ -819,30 +813,36 @@ export default function App() {
                     </div>
 
                     <section
+                        {...swipeHandlers}
                         className="min-w-0 flex-1 overflow-hidden rounded-[32px] border border-stone-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)] [touch-action:pan-y]"
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd}
                     >
+                        <div
+                            onClick={toggleAnswer}
+                            className={selectedMode === "review" ? "relative cursor-pointer outline-none focus:outline-none" : "relative outline-none focus:outline-none"}
+                            role={selectedMode === "review" ? "button" : undefined}
+                            tabIndex={selectedMode === "review" ? 0 : undefined}
+                            onKeyDown={(e) => {
+                                if (selectedMode === "review" && (e.key === "Enter" || e.key === " ")) {
+                                    e.preventDefault();
+                                    toggleAnswer();
+                                }
+                            }}
+                            style={{
+                                transform: `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.03}deg)`,
+                                transition: swipeActive ? "none" : "transform 220ms ease",
+                            }}
+                        >
                             <div
-                                onClick={toggleAnswer}
-                                className={selectedMode === "review" ? "cursor-pointer" : ""}
-                                role={selectedMode === "review" ? "button" : undefined}
-                                tabIndex={selectedMode === "review" ? 0 : undefined}
-                                onKeyDown={(e) => {
-                                    if (selectedMode === "review" && (e.key === "Enter" || e.key === " ")) {
-                                        e.preventDefault();
-                                        toggleAnswer();
-                                    }
-                                }}
-                            >
+                                className={`absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-emerald-100/80 to-transparent transition-opacity ${
+                                    swipeOffset > 12 ? "opacity-100" : "opacity-0"
+                                }`}
+                            />
+                            <div
+                                className={`absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-sky-100/80 to-transparent transition-opacity ${
+                                    swipeOffset < -12 ? "opacity-100" : "opacity-0"
+                                }`}
+                            />
                                 <div className="border-b border-stone-200 bg-[linear-gradient(135deg,#f7f4ec_0%,#ffffff_48%,#eef6f1_100%)] px-5 py-5 sm:px-6">
-                                    <div className="flex items-center justify-between gap-4">
-                                        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">Japanese</p>
-                                        <div className="rounded-full bg-white/80 px-3 py-2 text-xs font-bold text-slate-600">
-                                            {MODE_OptIONS.find((mode) => mode.id === selectedMode)?.label}
-                                        </div>
-                                    </div>
                                     {renderJapanesePrompt()}
                                 </div>
 
@@ -887,8 +887,8 @@ export default function App() {
                                         </button>
                                     ) : null}
                                 </div>
-                                </div>
                             </div>
+                        </div>
                     </section>
                 </main>
 
