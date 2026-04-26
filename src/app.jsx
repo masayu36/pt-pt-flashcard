@@ -49,8 +49,15 @@ const DATA = [
         comment: 'quanto = how much'
     },
     {
-        jp1: 'How are you?（調子）',
+        jp1: 'How are you?（informal）',
         pt1: 'Como estás?',
+        jp2: 'I\'m good/well.',
+        pt2: 'Estou bem.',
+        comment: ''
+    },
+    {
+        jp1: 'How are you?（formal）',
+        pt1: 'Como está?',
         jp2: 'I\'m good/well.',
         pt2: 'Estou bem.',
         comment: ''
@@ -63,7 +70,7 @@ const DATA = [
         comment: ''
     },
     {
-        jp1: 'How is he?（調子）',
+        jp1: 'How is he?',
         pt1: 'Como está ele?',
         jp2: '彼はちょっと病気だよ。',
         pt2: 'Ele está um pouco doente.',
@@ -833,20 +840,18 @@ export default function App() {
                             }}
                         >
                             <div
-                                className={`absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-emerald-100/80 to-transparent transition-opacity ${
-                                    swipeOffset > 12 ? "opacity-100" : "opacity-0"
-                                }`}
+                                className={`absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-emerald-100/80 to-transparent transition-opacity ${swipeOffset > 12 ? "opacity-100" : "opacity-0"
+                                    }`}
                             />
                             <div
-                                className={`absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-sky-100/80 to-transparent transition-opacity ${
-                                    swipeOffset < -12 ? "opacity-100" : "opacity-0"
-                                }`}
+                                className={`absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-sky-100/80 to-transparent transition-opacity ${swipeOffset < -12 ? "opacity-100" : "opacity-0"
+                                    }`}
                             />
-                                <div className="border-b border-stone-200 bg-[linear-gradient(135deg,#f7f4ec_0%,#ffffff_48%,#eef6f1_100%)] px-5 py-5 sm:px-6">
-                                    {renderJapanesePrompt()}
-                                </div>
+                            <div className="border-b border-stone-200 bg-[linear-gradient(135deg,#f7f4ec_0%,#ffffff_48%,#eef6f1_100%)] px-5 py-5 sm:px-6">
+                                {renderJapanesePrompt()}
+                            </div>
 
-                                <div className="px-5 py-5 sm:px-6">
+                            <div className="px-5 py-5 sm:px-6">
                                 {selectedMode === "review" && (
                                     <p className="mb-4 text-center text-sm font-semibold text-slate-400">
                                         カードをタップして答えを{showAnswer ? "隠す" : "表示"}
