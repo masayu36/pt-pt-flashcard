@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Check, Mic, RotateCcw, Settings, Volume2, X } from 'lucide-react';
+import { Check, Home, Mic, Settings, Volume2, X } from 'lucide-react';
 import { useSwipeable } from 'react-swipeable';
 
 // Official Azure Speech pt-pt voice candidates we can try locally.
@@ -21,8 +21,8 @@ const DATA = [
     { jp1: "熱がある。", pt1: "(Eu) Estou com febre.", sound1: "Estou com febre.", comment: "com febre = have a fever" },
     { jp1: "(私) 寒い。", pt1: "(Eu) Estou com frio.", sound1: "Estou com frio.", comment: "com frio = cold" },
     { jp1: "(私) 熱い。", pt1: "(Eu) Estou com calor.", sound1: "Estou com calor.", comment: "com calor = hot" },
-    { jp1: "(外) 寒い。", pt1: "Está frio.", sound1: "Está frio.", comment: "天候、気温の場合はitが主語だが、ポル語は表現しない。" },
-    { jp1: "(外) 暑い。", pt1: "Está calor/quente.", sound1: "Está calor.", comment: "天候、気温の場合はitが主語だが、ポル語は表現しない。" },
+    { jp1: "(外) 寒い。", pt1: "Está frio.", sound1: "Está frio.", comment: "天候、気温の場合は it が主語だが、ポル語は表現しない。" },
+    { jp1: "(外) 暑い。", pt1: "Está calor/quente.", sound1: "Está calor.", comment: "天候、気温の場合は it が主語だが、ポル語は表現しない。" },
     { jp1: "(お前) 遅刻だよ。", pt1: "(Tu) Estás atrasado.", sound1: "Estás atrasado.", comment: "atrasado = late" },
     { jp1: "(あなた) 遅刻だよ。", pt1: "(Você) Está atrasado.", sound1: "Está atrasado.", comment: "atrasado = late" },
     { jp1: "(お前) お腹空いてる？", pt1: "(Tu) Estás com fome?", sound1: "Estás com fome?", comment: "com fome = hungry" },
@@ -637,9 +637,17 @@ export default function App() {
         }
     };
 
-    const toggleAnswer = (lineIndex = 0) => {
+    const handleReviewLineTap = (lineIndex, line) => {
         if (selectedMode !== "review") return;
-        setRevealedReviewLines((prev) => prev.map((revealed, index) => (index === lineIndex ? !revealed : revealed)));
+
+        const isRevealed = revealedReviewLines[lineIndex];
+        if (!isRevealed) {
+            setRevealedReviewLines((prev) =>
+                prev.map((revealed, index) => (index === lineIndex ? true : revealed))
+            );
+        }
+
+        playSpeech(line.sound, lineIndex === 0 ? voiceA : voiceB, lineIndex);
     };
 
     const updateTypedAnswer = (lineIndex, value) => {
@@ -894,7 +902,7 @@ export default function App() {
                     <div
                         onClick={(e) => {
                             e.stopPropagation();
-                            toggleAnswer(index);
+                            handleReviewLineTap(index, line);
                         }}
                         className={`flex items-center gap-4 rounded-[24px] border px-4 py-4 transition-all ${activeSpeaker === index ? "border-emerald-300 bg-emerald-50" : "border-stone-200 bg-stone-50"}`}
                     >
@@ -903,19 +911,6 @@ export default function App() {
                                 {revealedReviewLines[index] ? line.pt : "••••••••••"}
                             </p>
                         </div>
-                        <button
-                            type="button"
-                            aria-label="音声を再生"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                if (revealedReviewLines[index]) {
-                                    playSpeech(line.sound, index === 0 ? voiceA : voiceB, index);
-                                }
-                            }}
-                            className={`hidden rounded-2xl p-3 transition-colors sm:block ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-500 hover:bg-stone-100"}`}
-                        >
-                            <Volume2 size={18} />
-                        </button>
                     </div>
 
                     {revealedReviewLines[index] && (
@@ -924,9 +919,9 @@ export default function App() {
                             aria-label="音声を再生"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                playSpeech(line.sound, index === 0 ? voiceA : voiceB, index);
+                                handleReviewLineTap(index, line);
                             }}
-                            className={`flex w-full items-center justify-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition-colors sm:hidden ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-600 border border-stone-200"}`}
+                            className={`flex w-full items-center justify-center gap-3 rounded-[20px] px-4 py-3 text-sm font-black transition-colors ${activeSpeaker === index ? "bg-emerald-700 text-white" : "bg-white text-slate-600 border border-stone-200"}`}
                         >
                             <Volume2 size={18} />
                             音声を再生
@@ -1127,7 +1122,7 @@ export default function App() {
                                 onClick={leaveSession}
                                 className="rounded-2xl border border-stone-200 bg-white p-3 text-slate-400 shadow-[0_10px_28px_rgba(15,23,42,0.06)] transition-colors hover:text-slate-700"
                             >
-                                <RotateCcw size={20} />
+                                <Home size={20} />
                             </button>
                             <button
                                 type="button"
@@ -1144,16 +1139,7 @@ export default function App() {
                         className="min-w-0 flex-1 overflow-hidden rounded-[32px] border border-stone-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)] [touch-action:pan-y]"
                     >
                         <div
-                            onClick={toggleAnswer}
                             className={selectedMode === "review" ? "relative cursor-pointer outline-none focus:outline-none" : "relative outline-none focus:outline-none"}
-                            role={selectedMode === "review" ? "button" : undefined}
-                            tabIndex={selectedMode === "review" ? 0 : undefined}
-                            onKeyDown={(e) => {
-                                if (selectedMode === "review" && (e.key === "Enter" || e.key === " ")) {
-                                    e.preventDefault();
-                                    toggleAnswer(0);
-                                }
-                            }}
                             style={{
                                 transform: `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.03}deg)`,
                                 transition: swipeActive ? "none" : "transform 220ms ease",
